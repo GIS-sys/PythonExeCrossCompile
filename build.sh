@@ -1,20 +1,18 @@
 #!/bin/bash
 
-# Создаем виртуальное окружение
-python3.10 -m venv venv
-source venv/bin/activate
+# Активируем conda environment
+conda activate stl_processor
 
-# Устанавливаем зависимости
-pip install torch pyinstaller
+# Проверяем, что environment активирован
+if [ -z "$CONDA_PREFIX" ]; then
+    echo "Conda environment not activated. Exiting."
+    exit 1
+fi
 
-# Собираем исполняемый файл
-pyinstaller --onefile \
-            --name stl_processor \
-            --add-data "$(python -c 'import torch; print(torch.__path__[0])'):torch" \
-            --hidden-import torch \
-            --hidden-import torch._C \
-            --runtime-hook runtime_hook.py \
-            main.py
+echo "Building with Conda environment: $CONDA_PREFIX"
+
+# Собираем с помощью PyInstaller
+pyinstaller build.spec
 
 echo "Build completed! Executable: dist/stl_processor"
 
