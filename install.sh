@@ -1,3 +1,5 @@
+#!/bin/bash
+
 eval "$(conda shell.bash hook)"
 
 conda create -n stl_processor python=3.10 -y  # Создаем environment с Python 3.10

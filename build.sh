@@ -1,5 +1,7 @@
 #!/bin/bash
 
+eval "$(conda shell.bash hook)"
+
 # Активируем conda environment
 conda activate stl_processor
 
