@@ -8,21 +8,37 @@ a = Analysis(
     binaries=[],
     datas=[],
     hiddenimports=[
-        'torch',
+        'torch', 
         'torch._C',
         'torch.nn',
         'torch.nn.functional',
         'torch.backends.cudnn',
+        'numpy.core._multiarray_umath',
+        'numpy.core._multiarray_tests',
     ],
     hookspath=[],
     hooksconfig={},
-    runtime_hooks=[],
+    runtime_hooks=['runtime_hook.py'],
     excludes=[],
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
     cipher=block_cipher,
     noarchive=False,
 )
+
+# Добавляем MKL библиотеки
+import torch
+import os
+
+# Находим MKL библиотеки
+conda_env_path = os.environ.get('CONDA_PREFIX', '')
+if conda_env_path:
+    lib_path = os.path.join(conda_env_path, 'lib')
+    if os.path.exists(lib_path):
+        for lib_file in os.listdir(lib_path):
+            if lib_file.startswith('libmkl_') and lib_file.endswith('.so'):
+                src_path = os.path.join(lib_path, lib_file)
+                a.binaries.append((lib_file, src_path, "EXTENSION"))
 
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
