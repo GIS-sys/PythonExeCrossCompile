@@ -1,3 +1,4 @@
+# Соберите Docker образ
 docker build -t windows-builder .
 
 # Запустите контейнер и выполните сборку
@@ -7,11 +8,3 @@ docker run -it --rm \
   windows-builder \
   ./build_windows.sh
 
-
-
-# Тестируем .exe файл в wine
-cd output
-wine stl_processor.exe path_to_stl=test.stl target_folder=./output
-
-# Проверяем код возврата
-echo $?
