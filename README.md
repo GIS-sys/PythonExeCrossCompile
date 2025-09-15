@@ -12,6 +12,16 @@ USE .ENV FILE AND DOCKER ARGS!!!!!!!!!
 
 4) Run ./compile_windows.sh
 
+docker build -t windows-builder .
+
+docker run -it --rm \
+  -v $(pwd):/app \
+  -v $(pwd)/output:/app/dist \
+  windows-builder \
+  ./build_windows.sh
+
+
+
 # Manual compilation
 
 0) Install wine
@@ -39,7 +49,7 @@ wine ./python-3.12.1-amd64.exe
 4) Set an env variable:
 
 ```bash
-CROSS_PROJECT=$(echo "Z:"$(pwd)"/main.py" | tr / \\)
+CROSS_PROJECT=$(echo "Z:"$(pwd)"/project/main.py" | tr / \\)
 ```
 
 5) Run compilation:
@@ -50,29 +60,20 @@ mkdir build && cd build
 
 - Either to one exe file:
 ```bash
-wine pyinstaller --onefile $CROSS_PROJECT
+wine pyinstaller --onefile "$CROSS_PROJECT"
 ```
 
 - Or to a single folder:
 ```bash
-wine pyinstaller --onefolder $CROSS_PROJECT
+wine pyinstaller --onefolder "$CROSS_PROJECT"
 ```
-
-
-docker build -t windows-builder .
-
-# Запустите контейнер и выполните сборку
-docker run -it --rm \
-  -v $(pwd):/app \
-  -v $(pwd)/output:/app/dist \
-  windows-builder \
-  ./build_windows.sh
 
 
 
 # Тестируем .exe файл в wine
-cd output
-wine stl_processor.exe path_to_stl=test.stl target_folder=./output
 
-# Проверяем код возврата
-echo $?
+```bash
+cd dist/
+wine main.exe path_to_stl=test.stl target_folder=./output
+```
+
