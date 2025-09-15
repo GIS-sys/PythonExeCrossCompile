@@ -28,7 +28,9 @@ docker run -it --rm \
 
 ```bash
 sudo apt install --install-recommends winehq-stable
-wine winecfg -v win10
+sudo apt install winetricks
+winetricks vcrun2022
+winetricks -q win10
 ```
 
 1) Download the python installer https://www.python.org/downloads/release/python-31210/
@@ -91,4 +93,26 @@ wine pyinstaller --onefolder "$CROSS_PROJECT"
 cd dist/
 wine main.exe path_to_stl=test.stl target_folder=./output
 ```
+
+
+
+install wine, winetricks
+
+winetricks install vs 2019
+winetricks -q win10
+
+install python
+install numpy
+install torch
+
+
+export OMP_NUM_THREADS=1
+export OMP_WAIT_POLICY=PASSIVE
+export KMP_BLOCKTIME=0
+export KMP_AFFINITY=disabled
+
+export MKL_ENABLE_INSTRUCTIONS=AVX2
+export MKL_DYNAMIC=FALSE
+
+install pyinstaller
 
