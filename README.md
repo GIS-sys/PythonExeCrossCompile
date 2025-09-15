@@ -18,6 +18,7 @@ USE .ENV FILE AND DOCKER ARGS!!!!!!!!!
 
 ```bash
 sudo apt install --install-recommends winehq-stable
+wine winecfg -v win10
 ```
 
 1) Download the python installer https://www.python.org/downloads/release/python-31210/
@@ -30,6 +31,7 @@ wget https://www.python.org/ftp/python/3.12.10/python-3.12.10-amd64.exe
 
 ```bash
 wine ./python-3.12.1-amd64.exe
+# (check both "use admin priviliges" and "add to Path")
 ```
 
 3) Put all source files into `project/` folder with `main.py` as an entry point
