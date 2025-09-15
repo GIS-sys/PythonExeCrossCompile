@@ -40,7 +40,7 @@ wget https://www.python.org/ftp/python/3.12.10/python-3.12.10-amd64.exe
 2) Install python on wine
 
 ```bash
-wine ./python-3.12.1-amd64.exe
+wine ./python-3.12.10-amd64.exe
 # (check both "use admin priviliges" and "add to Path")
 ```
 
