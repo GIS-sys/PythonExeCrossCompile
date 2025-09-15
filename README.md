@@ -63,7 +63,8 @@ CROSS_PROJECT=$(echo "Z:"$(pwd)"/project/main.py" | tr / \\)
 install required libraries
 
 ```bash
-wine pip install torch==2.8.0 numpy==2.3.3
+wine pip install numpy==2.3.3
+wine pip install torch==2.8.0 --index-url https://download.pytorch.org/whl/cpu
 ```
 
 enter build directory
