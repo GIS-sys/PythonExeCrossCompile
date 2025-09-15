@@ -36,22 +36,26 @@ wine ./python-3.12.1-amd64.exe
 
 3) Put all source files into `project/` folder with `main.py` as an entry point
 
-4) Copy `project/` folder into ~/.wine/drive_c/Public/project/
+4) Set an env variable:
 
 ```bash
-cp -r ./project/ ~/.wine/drive_c/Public/project/
+CROSS_PROJECT=$(echo "Z:"$(pwd)"/main.py" | tr / \\)
 ```
 
 5) Run compilation:
 
+```bash
+mkdir build && cd build
+```
+
 - Either to one exe file:
 ```bash
-wine pyinstaller --onefile "C:/users/Public/project/main.py"
+wine pyinstaller --onefile $CROSS_PROJECT
 ```
 
 - Or to a single folder:
 ```bash
-wine pyinstaller --onefolder "C:/users/Public/project/main.py"
+wine pyinstaller --onefolder $CROSS_PROJECT
 ```
 
 
