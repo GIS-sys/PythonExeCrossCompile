@@ -44,6 +44,12 @@ wine ./python-3.12.1-amd64.exe
 # (check both "use admin priviliges" and "add to Path")
 ```
 
+and pyinstaller
+
+```bash
+wine pip install pyinstaller
+```
+
 3) Put all source files into `project/` folder with `main.py` as an entry point
 
 4) Set an env variable:
@@ -53,6 +59,14 @@ CROSS_PROJECT=$(echo "Z:"$(pwd)"/project/main.py" | tr / \\)
 ```
 
 5) Run compilation:
+
+install required libraries
+
+```bash
+wine pip install torch==2.8.0 numpy==2.3.3
+```
+
+enter build directory
 
 ```bash
 mkdir build && cd build
