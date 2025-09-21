@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  windows-builder:
+    build: .
+    volumes:
+      - ./project:/app/project
+      - ./dist:/app/build/dist
+    working_dir: /app
+
