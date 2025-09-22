@@ -11,7 +11,6 @@ echo "Mode: $MODE"
 if [ ! -f "/app/state/installation_complete_python$PYTHON_VERSION" ]; then
     echo "Running Python installation steps..."
 
-    winetricks -q win10
     winetricks --force vcrun2019
     winetricks -q win10
 
@@ -31,23 +30,32 @@ fi
 
 
 
-echo "Starting main script with arguments: $@"
+echo "Starting main script"
 wine python --version
+wine --version
+winetricks -q win10
+wine pip freeze
+
+
+
+export OMP_NUM_THREADS=1
+export OMP_WAIT_POLICY=PASSIVE
+export KMP_BLOCKTIME=0
+export KMP_AFFINITY=disabled
+export MKL_ENABLE_INSTRUCTIONS=AVX2
+export MKL_DYNAMIC=FALSE
 
 case "$MODE" in
     compile)
+        echo "Compilation..."
         wine pip install -r /app/project/requirements.txt
         cd /app/build
         wine pyinstaller --onefile "Z:\\app\\project\\main.py"
         ;;
     run)
-        export OMP_NUM_THREADS=1
-        export OMP_WAIT_POLICY=PASSIVE
-        export KMP_BLOCKTIME=0
-        export KMP_AFFINITY=disabled
-        export MKL_ENABLE_INSTRUCTIONS=AVX2
-        export MKL_DYNAMIC=FALSE
-        wine python "Z:\\app\\build\\dist\\main.exe"
+        echo "Running previously compiled main.exe..."
+        cd /app/build/dist
+        wine python ./main.exe
         ;;
     *)
         echo "Error: Unknown mode '$MODE'"
