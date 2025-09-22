@@ -4,6 +4,7 @@ mkdir -p /app/state
 read -r PYTHON_VERSION < /app/project/__version__.txt
 echo "PYTHON VERSION: $PYTHON_VERSION"
 echo "Mode: $MODE"
+echo "Arguments for main.exe: $MAINARGS"
 
 
 
@@ -55,7 +56,7 @@ case "$MODE" in
     run)
         echo "Running previously compiled main.exe..."
         cd /app
-        wine build/dist/main.exe
+        wine build/dist/main.exe $MAINARGS
         ;;
     *)
         echo "Error: Unknown mode '$MODE'"

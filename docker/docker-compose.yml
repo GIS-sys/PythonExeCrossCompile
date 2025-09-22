@@ -4,6 +4,7 @@ services:
       - DISPLAY=$DISPLAY
       - QT_X11_NO_MITSHM=1
       - MODE=${MODE:-compile}
+      - MAINARGS=$MAINARGS
     build:
       context: ..
       dockerfile: docker/Dockerfile

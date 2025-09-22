@@ -12,14 +12,9 @@
 
 2) Run `./compile_windows.sh` or `./compile_windows.sh MODE=compile`
 
-3) Run `./compile_windows.sh MODE=run`
+3) Run `./compile_windows.sh MODE=run MAINARGS="..."` where MAINARGS contains arguments for main.exe. For example: `./compile_windows.sh MODE=run MAINARGS="path_to_stl=./a.stl target_folder=./"`
 
 
-
-
-
-TOIDODOOOOOOOOOOOOOOOOO
-write about envs and additional lines for multithread
 
 # Manual compilation
 
@@ -115,3 +110,7 @@ export MKL_DYNAMIC=FALSE
 
 install pyinstaller
 
+
+# Important notes
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+write about envs and additional lines for multithread
