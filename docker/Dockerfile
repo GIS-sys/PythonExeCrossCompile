@@ -26,9 +26,5 @@ RUN apt update && \
     apt install -y --install-recommends winehq-stable && \
     apt install -y winetricks;
 
-ARG MODE=compile
-ENV MODE ${MODE}
-RUN echo $MODE && sleep 5
-
 CMD ["/bin/bash"]
 
