@@ -54,8 +54,8 @@ case "$MODE" in
         ;;
     run)
         echo "Running previously compiled main.exe..."
-        cd /app/build/dist
-        wine python ./main.exe
+        cd /app
+        wine build/dist/main.exe
         ;;
     *)
         echo "Error: Unknown mode '$MODE'"
