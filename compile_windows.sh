@@ -1,2 +1,6 @@
-docker compose run --rm windows-builder --onefile
+#!/bin/bash
+
+xhost +local:
+
+docker compose -f docker/docker-compose.yml up --build "$@"
 

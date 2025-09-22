@@ -1,24 +1,16 @@
-USE .ENV FILE AND DOCKER ARGS!!!!!!!!!
-
 # Docker compilation
 
 0) Install docker
 
-1) Put preferred python version in `__version__.txt` in full form (3.12.10, not 3.12)
+1) Prepare project/ folder:
 
-2) Put required libraries in `requirements.txt`
+    - create `project/__version__.txt` file with preferred python version in full form (3.12.10, not 3.12)
 
-3) Put all source files into `project/` folder with `main.py` as an entry point
+    - create `project/requirements.txt` file with required libraries
 
-4) Run ./compile_windows.sh
+    - put all the source files into `project/` folder with `main.py` as an entry point
 
-docker build -t windows-builder .
-
-docker run -it --rm \
-  -v $(pwd):/app \
-  -v $(pwd)/output:/app/dist \
-  windows-builder \
-  ./build_windows.sh
+2) Run ./compile_windows.sh
 
 
 

@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  windows-builder:
+    environment:
+      - DISPLAY=$DISPLAY
+      - QT_X11_NO_MITSHM=1
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    volumes:
+      - ../docker:/app/docker:ro
+      - ../project:/app/project:ro
+      - ../build:/app/build
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ~/.Xauthority:/root/.Xauthority:rw
+    network_mode: host
+    working_dir: /app
+    entrypoint: ["/app/docker/entrypoint.sh"]
+    command: []
+    stdin_open: true
+    tty: true
+
