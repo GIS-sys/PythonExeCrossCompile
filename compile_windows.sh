@@ -2,5 +2,7 @@
 
 xhost +local:
 
-docker compose -f docker/docker-compose.yml up --build "$@"
+eval "$@"
+
+docker compose -f docker/docker-compose.yml up --build --build-arg $@
 

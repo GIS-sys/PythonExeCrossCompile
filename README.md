@@ -1,8 +1,8 @@
 # Docker compilation
 
-0) Install docker
+0) Install docker and docker compose
 
-1) Prepare project/ folder:
+1) Prepare project/ folder (or skip this step to run with an example code):
 
     - create `project/__version__.txt` file with preferred python version in full form (3.12.10, not 3.12)
 
@@ -10,9 +10,16 @@
 
     - put all the source files into `project/` folder with `main.py` as an entry point
 
-2) Run ./compile_windows.sh
+2) Run `./compile_windows.sh` or `./compile_windows.sh MODE=compile`
+
+3) Run `./compile_windows.sh MODE=run`
 
 
+
+
+
+TOIDODOOOOOOOOOOOOOOOOO
+write about envs and additional lines for multithread
 
 # Manual compilation
 
