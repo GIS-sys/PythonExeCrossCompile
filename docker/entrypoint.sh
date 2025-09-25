@@ -47,20 +47,33 @@ export MKL_ENABLE_INSTRUCTIONS=AVX2
 export MKL_DYNAMIC=FALSE
 
 case "$MODE" in
-    compile)
+    "compile-onefile")
         echo "Compilation..."
         wine pip install -r /app/project/requirements.txt
         cd /app/build
         wine pyinstaller --onefile "Z:\\app\\project\\main.py"
         ;;
-    run)
+    "compile-onedir")
+        echo "Compilation..."
+        wine pip install -r /app/project/requirements.txt
+        cd /app/build
+        wine pyinstaller --onedir "Z:\\app\\project\\main.py"
+        ;;
+    "run-onefile")
         echo "Running previously compiled main.exe..."
-        cd /app
-        wine build/dist/main.exe $MAINARGS
+        mkdir -p /app/build/runtime
+        cd /app/build/runtime
+        wine /app/build/dist/main.exe $MAINARGS
+        ;;
+    "run-onedir")
+        echo "Running previously compiled main.exe..."
+        mkdir -p /app/build/runtime
+        cd /app/build/runtime
+        wine /app/build/dist/main/main.exe $MAINARGS
         ;;
     *)
         echo "Error: Unknown mode '$MODE'"
-        echo "Available modes: compile, run"
+        echo "Available modes: compile-onefile, compile-onedir, run-onefile, run-onedir"
         exit 1
         ;;
 esac

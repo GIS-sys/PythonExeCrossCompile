@@ -10,14 +10,14 @@
 
     - put all the source files into `project/` folder with `main.py` as an entry point
 
-2) Run `./compile_windows.sh` or `./compile_windows.sh MODE=compile`
+2) Run `./compile_windows.sh` or `./compile_windows.sh MODE=compile-onefile` (or MODE=compile-onedir for compiling into a directory)
 
-3) Run `./compile_windows.sh MODE=run MAINARGS="..."` where MAINARGS contains arguments for main.exe. For example: `./compile_windows.sh MODE=run MAINARGS="path_to_stl=./a.stl target_folder=./"`
+3) Run `./compile_windows.sh MODE=run-onefile MAINARGS="..."` (or MODE=run-onedir if was compiled with compile-onedir) where MAINARGS contains arguments for main.exe. For example: `./compile_windows.sh MODE=run MAINARGS="path_to_stl=./a.stl target_folder=./"`
 
 
 
 # Manual compilation
-
+#TODO
 0) Install wine
 
 ```bash
@@ -112,5 +112,18 @@ install pyinstaller
 
 
 # Important notes
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-write about envs and additional lines for multithread
+
+- If you are using numpy, you should put version <=2.2.1 because 2.2.2+ is broken for current wine (v10.0)
+
+- pyinstaller doesn't seem to support multithreading. If you or library you imported uses it, you should disable it by putting the following lines in the *very* beginning of main.py:
+
+```python
+
+```
+
+# TODO
+
+- use proper windows docker base image: https://hub.docker.com/r/microsoft/windows-servercore/
+
+- use nuitka instead of pyinstaller: https://habr.com/ru/articles/838480/
+
