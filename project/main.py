@@ -3,6 +3,7 @@ import os
 import torch
 from pathlib import Path
 
+
 def main():
     print("Windows PyTorch Test Application v3.0")
     print("=" * 40)

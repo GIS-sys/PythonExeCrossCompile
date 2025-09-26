@@ -1,16 +1,60 @@
-# Docker compilation
+# About
 
-0) Install docker and docker compose
+This repository provides an example and a step-by-step guide for cross-compilation of Python project into a standalone ".exe" file for Windows
 
-1) Prepare project/ folder (or skip this step to run with an example code):
+Below you will find sections for how to compile and run your code on Ubuntu, as well as useful warnings and tips about potential problems that can occur
 
-    - create `project/__version__.txt` file with preferred python version in full form (3.12.10, not 3.12)
 
-    - create `project/requirements.txt` file with required libraries
 
-    - put all the source files into `project/` folder with `main.py` as an entry point
+# Compilation and testing
 
-2) Run `./compile_windows.sh` or `./compile_windows.sh MODE=compile-onefile` (or MODE=compile-onedir for compiling into a directory)
+You can compile the code either via docker (preferable), or via manual installation of wine on your PC
+
+## Docker (preferable)
+
+0) Install docker and docker compose (f. e. [this official tutorial](https://docs.docker.com/compose/install/))
+
+1) Prepare your project for compilation. There are three paths here, depending on what you need:
+
+    1) only run the example without thinking:
+
+       Just skip this step in this case
+
+    2) play with the example / copy your source code into current folder:
+
+        1) modify `project/__version__.txt` file according to your preferred python version in full form (3.12.10, not 3.12)
+
+        2) modify `project/requirements.txt` file with required libraries and their versions
+
+        3) put all the source files into a `project/` folder with `project/main.py` as an entry point
+
+    3) compile your code located in another directory:
+
+        1) create `/path/to/your/project/__version__.txt` file with preferred python version in full form (3.12.10, not 3.12)
+
+        2) create `/path/to/your/project/requirements.txt` file with required libraries and their versions
+
+        3) make sure `/path/to/your/project/main.py` is the entry point for your entire application
+
+        4) modify the `docker/docker-compose.yml` file, changing the line `- ../project:/app/project:ro` (in `services.windows-builder.volumes`) to `- /path/to/your/project:/app/project:ro`
+
+2) Compile the application. There are several options, depending on what you need:
+
+    1) only run the example without thinking:
+
+       Run `./compile_windows.sh`
+
+    2) compile the project into a single .exe file, with all of the dependencies packaged inside:
+
+       Run `./compile_windows.sh MODE=compile-onefile`
+
+    3) compile the project into a single directory, containing both `.exe` file as well as some dependencies (faster to execute, but more clumsier):
+
+       Run `./compile_windows.sh MODE=compile-onedir`
+
+    4) if you want to compile and pass some custom arguments directly to the pyinstaller:
+
+       Run something like `./compile_windows.sh MODE=compile PYINSTALLERARGS="--onefile --nowindowed"` (you can of course modify the PYINSTALLERARGS argument)
 
 3) Run `./compile_windows.sh MODE=run-onefile MAINARGS="..."` (or MODE=run-onedir if was compiled with compile-onedir) where MAINARGS contains arguments for main.exe. For example: `./compile_windows.sh MODE=run MAINARGS="path_to_stl=./a.stl target_folder=./"`
 
@@ -18,8 +62,8 @@ You can also set pyinstaller args through PYINSTALLERARGS arg for compile_window
 
 
 
-# Manual compilation
-#TODO
+## Manual (Ubuntu)
+
 0) Install wine
 
 ```bash
