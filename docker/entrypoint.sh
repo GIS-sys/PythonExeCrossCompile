@@ -5,6 +5,7 @@ read -r PYTHON_VERSION < /app/project/__version__.txt
 echo "PYTHON VERSION: $PYTHON_VERSION"
 echo "Mode: $MODE"
 echo "Arguments for main.exe: $MAINARGS"
+echo "Arguments for pyinstaller: $PYINSTALLERARGS"
 
 
 
@@ -46,18 +47,31 @@ export KMP_AFFINITY=disabled
 export MKL_ENABLE_INSTRUCTIONS=AVX2
 export MKL_DYNAMIC=FALSE
 
+if [ "a$MODE" == "compile-onefile" ]; then
+   PYINSTALLERARGS="$PYINSTALLERARGS --onefile"
+fi
+if [ "a$MODE" == "compile-onedir" ]; then
+   PYINSTALLERARGS="$PYINSTALLERARGS --onedir"
+fi
+
 case "$MODE" in
     "compile-onefile")
         echo "Compilation..."
         wine pip install -r /app/project/requirements.txt
         cd /app/build
-        wine pyinstaller --onefile "Z:\\app\\project\\main.py"
+        wine pyinstaller $PYINSTALLERARGS "Z:\\app\\project\\main.py"
         ;;
     "compile-onedir")
         echo "Compilation..."
         wine pip install -r /app/project/requirements.txt
         cd /app/build
-        wine pyinstaller --onedir "Z:\\app\\project\\main.py"
+        wine pyinstaller $PYINSTALLERARGS "Z:\\app\\project\\main.py"
+        ;;
+    "compile")
+        echo "Compilation..."
+        wine pip install -r /app/project/requirements.txt
+        cd /app/build
+        wine pyinstaller $PYINSTALLERARGS "Z:\\app\\project\\main.py"
         ;;
     "run-onefile")
         echo "Running previously compiled main.exe..."
@@ -73,7 +87,7 @@ case "$MODE" in
         ;;
     *)
         echo "Error: Unknown mode '$MODE'"
-        echo "Available modes: compile-onefile, compile-onedir, run-onefile, run-onedir"
+        echo "Available modes: compile-onefile, compile-onedir, compile, run-onefile, run-onedir"
         exit 1
         ;;
 esac

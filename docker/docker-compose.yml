@@ -5,6 +5,7 @@ services:
       - QT_X11_NO_MITSHM=1
       - MODE=${MODE:-compile-onefile}
       - MAINARGS=$MAINARGS
+      - PYINSTALLERARGS=$PYINSTALLERARGS
     build:
       context: ..
       dockerfile: docker/Dockerfile

@@ -14,6 +14,8 @@
 
 3) Run `./compile_windows.sh MODE=run-onefile MAINARGS="..."` (or MODE=run-onedir if was compiled with compile-onedir) where MAINARGS contains arguments for main.exe. For example: `./compile_windows.sh MODE=run MAINARGS="path_to_stl=./a.stl target_folder=./"`
 
+You can also set pyinstaller args through PYINSTALLERARGS arg for compile_windows.sh script
+
 
 
 # Manual compilation
