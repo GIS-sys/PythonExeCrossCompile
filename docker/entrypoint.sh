@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/bin/bash
 
 mkdir -p /app/state
 read -r PYTHON_VERSION < /app/project/__version__.txt
@@ -47,10 +47,10 @@ export KMP_AFFINITY=disabled
 export MKL_ENABLE_INSTRUCTIONS=AVX2
 export MKL_DYNAMIC=FALSE
 
-if [ "a$MODE" == "compile-onefile" ]; then
+if [[ "$MODE" == "compile-onefile" ]]; then
    PYINSTALLERARGS="$PYINSTALLERARGS --onefile"
 fi
-if [ "a$MODE" == "compile-onedir" ]; then
+if [[ "$MODE" == "compile-onedir" ]]; then
    PYINSTALLERARGS="$PYINSTALLERARGS --onedir"
 fi
 
@@ -59,19 +59,19 @@ case "$MODE" in
         echo "Compilation..."
         wine pip install -r /app/project/requirements.txt
         cd /app/build
-        wine pyinstaller $PYINSTALLERARGS "Z:\\app\\project\\main.py"
+        wine pyinstaller --noconfirm $PYINSTALLERARGS "Z:\\app\\project\\main.py"
         ;;
     "compile-onedir")
         echo "Compilation..."
         wine pip install -r /app/project/requirements.txt
         cd /app/build
-        wine pyinstaller $PYINSTALLERARGS "Z:\\app\\project\\main.py"
+        wine pyinstaller --noconfirm $PYINSTALLERARGS "Z:\\app\\project\\main.py"
         ;;
     "compile")
         echo "Compilation..."
         wine pip install -r /app/project/requirements.txt
         cd /app/build
-        wine pyinstaller $PYINSTALLERARGS "Z:\\app\\project\\main.py"
+        wine pyinstaller --noconfirm $PYINSTALLERARGS "Z:\\app\\project\\main.py"
         ;;
     "run-onefile")
         echo "Running previously compiled main.exe..."
