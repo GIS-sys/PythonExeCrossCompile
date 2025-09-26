@@ -17,7 +17,8 @@ RUN apt-get update && apt-get install -y \
     wget \
     software-properties-common \
     gnupg2 \
-    curl &&\
+    zip \
+    curl && \
     dpkg --add-architecture i386 && \
     mkdir -pm755 /etc/apt/keyrings && \
     wget -O - https://dl.winehq.org/wine-builds/winehq.key | gpg --dearmor -o /etc/apt/keyrings/winehq-archive.key - && \

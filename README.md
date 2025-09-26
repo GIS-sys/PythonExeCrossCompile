@@ -38,27 +38,45 @@ You can compile the code either via docker (preferable), or via manual installat
 
         4) modify the `docker/docker-compose.yml` file, changing the line `- ../project:/app/project:ro` (in `services.windows-builder.volumes`) to `- /path/to/your/project:/app/project:ro`
 
-2) Compile the application. There are several options, depending on what you need:
+2) If this is your first time using this repository, use `./run.sh` to build the initial docker image and install basic components. Running this script for the first time may take 5-10 minutes even on high-end hardware and high-speed internet connections. After few minutes have passed, the docker image itself should launch, and you will be prompted to install some of the following:
+
+    1) Wine Mono Installer
+
+       It is a small window with two buttons: Cancel and Install. Press Install and wait for the download to end
+
+    2) Visual Studio
+
+       I didn't get the prompt last time I checked, in case you are prompted to do something - please open an issue / PR and describe the steps you were prompted to take
+
+    3) Python
+
+       Check both checkboxes ("Use admin priviliges ..." and "Add python.exe to PATH"), then click "Install Now", after installation is finished click "Close"
+
+3) Compile the application. There are several options, depending on what you need:
 
     1) only run the example without thinking:
 
-       Run `./compile_windows.sh`
+       Run `./run.sh`
 
     2) compile the project into a single .exe file, with all of the dependencies packaged inside:
 
-       Run `./compile_windows.sh MODE=compile-onefile`
+       Run `./run.sh MODE=compile-onefile`
 
     3) compile the project into a single directory, containing both `.exe` file as well as some dependencies (faster to execute, but more clumsier):
 
-       Run `./compile_windows.sh MODE=compile-onedir`
+       Run `./run.sh MODE=compile-onedir`
 
     4) if you want to compile and pass some custom arguments directly to the pyinstaller:
 
-       Run something like `./compile_windows.sh MODE=compile PYINSTALLERARGS="--onefile --nowindowed"` (you can of course modify the PYINSTALLERARGS argument)
+       Run something like `./run.sh MODE=compile PYINSTALLERARGS="--onefile --nowindowed"` (you can of course modify the PYINSTALLERARGS argument)
 
-3) Run `./compile_windows.sh MODE=run-onefile MAINARGS="..."` (or MODE=run-onedir if was compiled with compile-onedir) where MAINARGS contains arguments for main.exe. For example: `./compile_windows.sh MODE=run MAINARGS="path_to_stl=./a.stl target_folder=./"`
+4) Run the application:
 
-You can also set pyinstaller args through PYINSTALLERARGS arg for compile_windows.sh script
+    1) 
+
+`./run.sh MODE=run-onefile MAINARGS="..."` (or MODE=run-onedir if was compiled with compile-onedir) where MAINARGS contains arguments for main.exe. For example: `./run.sh MODE=run MAINARGS="path_to_stl=./a.stl target_folder=./"`
+
+You can also set pyinstaller args through PYINSTALLERARGS arg for run.sh script
 
 
 
@@ -172,4 +190,6 @@ install pyinstaller
 - use proper windows docker base image: https://hub.docker.com/r/microsoft/windows-servercore/
 
 - use nuitka instead of pyinstaller: https://habr.com/ru/articles/838480/
+
+- if different python is installed - idk, choose one? or uninstall the previous one?
 
