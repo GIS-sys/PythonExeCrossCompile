@@ -189,6 +189,8 @@ export MKL_ENABLE_INSTRUCTIONS=AVX2
 export MKL_DYNAMIC=FALSE
 ```
 
+- in general, consult [official pyinstaller FAQ section](https://pyinstaller.org/en/latest/common-issues-and-pitfalls.html) in case of some problems
+
 
 
 # TODO
