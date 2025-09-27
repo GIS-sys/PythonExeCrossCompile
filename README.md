@@ -72,11 +72,13 @@ You can compile the code either via docker (preferable), or via manual installat
 
 4) Run the application:
 
-    1) 
+    1) If you compiled the example directly, use `./run.sh MODE=run-onefile MAINARGS="path_to_stl=a.stl target_folder=b"`
 
-`./run.sh MODE=run-onefile MAINARGS="..."` (or MODE=run-onedir if was compiled with compile-onedir) where MAINARGS contains arguments for main.exe. For example: `./run.sh MODE=run MAINARGS="path_to_stl=./a.stl target_folder=./"`
+    2) If you compiled via "onefile" mode: `./run.sh MODE=run-onefile`
 
-You can also set pyinstaller args through PYINSTALLERARGS arg for run.sh script
+    3) If you compile via "onedir" mode: `./run.sh MODE=run-onedir`
+
+    4) You can also add arguments to the running script. For example, if you compiled via "onefile" and want to run ".\\main.exe A=123 B=qwe", then use: `./run.sh MODE=run-onefile MAINARGS="A=123 B=qwe"`
 
 
 
