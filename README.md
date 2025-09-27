@@ -191,5 +191,3 @@ install pyinstaller
 
 - use nuitka instead of pyinstaller: https://habr.com/ru/articles/838480/
 
-- if different python is installed - idk, choose one? or uninstall the previous one?
-

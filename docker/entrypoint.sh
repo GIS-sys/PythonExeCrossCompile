@@ -10,8 +10,18 @@ echo "Arguments for pyinstaller: $PYINSTALLERARGS"
 
 
 # Check installation state
-if [ ! -f "/app/state/installation_complete_python$PYTHON_VERSION" ]; then
-    echo "Running Python installation steps..."
+installed_version=$(wine python --version)
+required_version=$(printf "Python ${PYTHON_VERSION}\15")
+if [[ $installed_version != $required_version ]]; then
+    cd /app/state
+    while true; do
+        python_installed=$(wine python --version)
+        if [[ "$python_installed" == "Application could not be started"* ]]; then
+            break
+        fi
+        echo -e "\n\nUninstalling Python...\nChoose and uninstall previous version of python"
+        wine uninstaller
+    done
 
     winetricks --force vcrun2019
     winetricks -q win10
@@ -20,7 +30,11 @@ if [ ! -f "/app/state/installation_complete_python$PYTHON_VERSION" ]; then
     wget "https://www.python.org/ftp/python/${PYTHON_VERSION}/python-${PYTHON_VERSION}-amd64.exe"
     wine ./python-${PYTHON_VERSION}-amd64.exe
     wine python --version
-    wine pip install pyinstaller
+    wine pip install -r /app/docker/requirements.txt
+    if [ $? -ne 0 ]; then
+        echo "Error: pip install failed"
+        exit 1
+    fi
 
     # Mark installation as complete in persistent storage
     touch /app/state/installation_complete_python$PYTHON_VERSION
