@@ -84,7 +84,16 @@ You can compile the code either via docker (preferable), or via manual installat
 
 ## Manual (Ubuntu)
 
-0) Install wine
+0) Add wine repository:
+
+```bash
+dpkg --add-architecture i386 && \
+mkdir -pm755 /etc/apt/keyrings && \
+wget -O - https://dl.winehq.org/wine-builds/winehq.key | gpg --dearmor -o /etc/apt/keyrings/winehq-archive.key - && \
+wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/noble/winehq-noble.sources;
+```
+
+Install wine:
 
 ```bash
 sudo apt install --install-recommends winehq-stable
@@ -103,7 +112,7 @@ wget https://www.python.org/ftp/python/3.12.10/python-3.12.10-amd64.exe
 
 ```bash
 wine ./python-3.12.10-amd64.exe
-# (check both "use admin priviliges" and "add to Path")
+# (check both "use admin priviliges" and "add to Path") when prompted
 ```
 
 and pyinstaller
@@ -114,7 +123,7 @@ wine pip install pyinstaller
 
 3) Put all source files into `project/` folder with `main.py` as an entry point
 
-4) Set an env variable:
+4) Set an env variable for convenience (it's a path to main.py, but how it's visible from wine):
 
 ```bash
 CROSS_PROJECT=$(echo "Z:"$(pwd)"/project/main.py" | tr / \\)
@@ -145,9 +154,7 @@ wine pyinstaller --onefile "$CROSS_PROJECT"
 wine pyinstaller --onefolder "$CROSS_PROJECT"
 ```
 
-
-
-# Тестируем .exe файл в wine
+6) Test:
 
 ```bash
 cd dist/
@@ -156,16 +163,23 @@ wine main.exe path_to_stl=test.stl target_folder=./output
 
 
 
-install wine, winetricks
+# Important notes
 
-winetricks install vs 2019
-winetricks -q win10
+- If you are using numpy, you should put version <=2.2.1 because 2.2.2+ is broken for current wine (v10.0)
 
-install python
-install numpy
-install torch
+- pyinstaller doesn't seem to support multithreading. If you or library you imported uses it, you should disable it by putting the following lines in the *very* beginning of main.py, even before any other import:
 
+```python
+from multiprocessing import Process, freeze_support
 
+if __name__ == '__main__':
+    freeze_support()
+    # import something
+    # ... do other stuff ...
+```
+
+However, this may not be sufficient especially when trying to launch exe with WINE. So before calling "wine main.exe", export this env variables:
+```bash
 export OMP_NUM_THREADS=1
 export OMP_WAIT_POLICY=PASSIVE
 export KMP_BLOCKTIME=0
@@ -173,19 +187,9 @@ export KMP_AFFINITY=disabled
 
 export MKL_ENABLE_INSTRUCTIONS=AVX2
 export MKL_DYNAMIC=FALSE
-
-install pyinstaller
-
-
-# Important notes
-
-- If you are using numpy, you should put version <=2.2.1 because 2.2.2+ is broken for current wine (v10.0)
-
-- pyinstaller doesn't seem to support multithreading. If you or library you imported uses it, you should disable it by putting the following lines in the *very* beginning of main.py:
-
-```python
-
 ```
+
+
 
 # TODO
 
