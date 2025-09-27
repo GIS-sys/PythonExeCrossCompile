@@ -5,7 +5,7 @@ from pathlib import Path
 
 
 def main():
-    print("Windows PyTorch Test Application v3.0")
+    print("Windows PyTorch Test Application v4.1")
     print("=" * 40)
 
     # Простая проверка аргументов

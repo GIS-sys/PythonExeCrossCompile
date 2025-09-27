@@ -55,21 +55,13 @@ if [[ "$MODE" == "compile-onedir" ]]; then
 fi
 
 case "$MODE" in
-    "compile-onefile")
+    "compile"*)
         echo "Compilation..."
         wine pip install -r /app/project/requirements.txt
-        cd /app/build
-        wine pyinstaller --noconfirm $PYINSTALLERARGS "Z:\\app\\project\\main.py"
-        ;;
-    "compile-onedir")
-        echo "Compilation..."
-        wine pip install -r /app/project/requirements.txt
-        cd /app/build
-        wine pyinstaller --noconfirm $PYINSTALLERARGS "Z:\\app\\project\\main.py"
-        ;;
-    "compile")
-        echo "Compilation..."
-        wine pip install -r /app/project/requirements.txt
+        if [ $? -ne 0 ]; then
+            echo "Error: pip install failed"
+            exit 1
+        fi
         cd /app/build
         wine pyinstaller --noconfirm $PYINSTALLERARGS "Z:\\app\\project\\main.py"
         ;;

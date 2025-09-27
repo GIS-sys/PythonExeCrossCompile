@@ -12,7 +12,7 @@ networkx==3.3
 packaging==25.0
 pefile==2023.2.7
 pyinstaller==6.16.0
-pyinstaller-hooks-contrib==2025.8
+# pyinstaller-hooks-contrib==2025.8
 pywin32-ctypes==0.2.3
 setuptools==70.2.0
 sympy==1.13.3

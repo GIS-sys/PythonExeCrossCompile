@@ -13,7 +13,8 @@ ENV DEBIAN_FRONTEND=noninteractive \
     MKL_DYNAMIC=FALSE
 
 # Install required packages with official Wine PPA
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && \
+    apt-get install -y \
     wget \
     software-properties-common \
     gnupg2 \
@@ -23,8 +24,8 @@ RUN apt-get update && apt-get install -y \
     mkdir -pm755 /etc/apt/keyrings && \
     wget -O - https://dl.winehq.org/wine-builds/winehq.key | gpg --dearmor -o /etc/apt/keyrings/winehq-archive.key - && \
     wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/noble/winehq-noble.sources;
-RUN apt update && \
-    apt install -y --install-recommends winehq-stable && \
+RUN apt update;
+RUN apt install -y --install-recommends winehq-stable && \
     apt install -y winetricks;
 
 CMD ["/bin/bash"]
