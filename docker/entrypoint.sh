@@ -81,14 +81,12 @@ case "$MODE" in
         ;;
     "run-onefile")
         echo "Running previously compiled main.exe..."
-        mkdir -p /app/build/runtime
-        cd /app/build/runtime
+        cd /app/project
         wine /app/build/dist/main.exe $MAINARGS
         ;;
     "run-onedir")
         echo "Running previously compiled main.exe..."
-        mkdir -p /app/build/runtime
-        cd /app/build/runtime
+        cd /app/project
         wine /app/build/dist/main/main.exe $MAINARGS
         ;;
     *)

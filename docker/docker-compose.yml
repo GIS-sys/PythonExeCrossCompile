@@ -11,7 +11,7 @@ services:
       dockerfile: docker/Dockerfile
     volumes:
       - ../docker:/app/docker:ro
-      - ../project:/app/project:ro
+      - /home/giswarm/tmp/MeshCNN:/app/project:rwo
       - ../build:/app/build
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - ~/.Xauthority:/root/.Xauthority:rw
