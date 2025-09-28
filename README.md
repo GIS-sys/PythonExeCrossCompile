@@ -189,6 +189,8 @@ export MKL_ENABLE_INSTRUCTIONS=AVX2
 export MKL_DYNAMIC=FALSE
 ```
 
+Also, if needed, look at [this SO question](https://stackoverflow.com/questions/24944558/pyinstaller-built-windows-exe-fails-with-multiprocessing)
+
 - in general, consult [official pyinstaller FAQ section](https://pyinstaller.org/en/latest/common-issues-and-pitfalls.html) in case of some problems
 
 
