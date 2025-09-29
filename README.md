@@ -165,6 +165,23 @@ wine main.exe path_to_stl=test.stl target_folder=./output
 
 # Important notes
 
+- If you are using some additional resources, pass them via PYINSTALLERARGS="--add-data=Z:\\app\\project\\somefolder\\somefile.txt:folder\\to\\store" and use from your code:
+
+```python
+import os
+
+def get_resource_path(relative_path):
+    """Get absolute path to resource, works for dev and for PyInstaller"""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
+open(get_resource_path("a/b/c.txt"))
+```
+
 - If you are using numpy, you should put version <=2.2.1 because 2.2.2+ is broken for current wine (v10.0)
 
 - pyinstaller doesn't seem to support multithreading. If you or library you imported uses it, you should disable it by putting the following lines in the *very* beginning of main.py, even before any other import:
