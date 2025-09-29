@@ -81,14 +81,12 @@ case "$MODE" in
         ;;
     "run-onefile")
         echo "Running previously compiled main.exe..."
-        mkdir -p /app/build/runtime
-        cd /app/build/runtime
+        cd /app/runtime
         wine /app/build/dist/main.exe $MAINARGS
         ;;
     "run-onedir")
         echo "Running previously compiled main.exe..."
-        mkdir -p /app/build/runtime
-        cd /app/build/runtime
+        cd /app/runtime
         wine /app/build/dist/main/main.exe $MAINARGS
         ;;
     *)
@@ -100,6 +98,6 @@ esac
 
 if [[ $MODE == "compile"* ]] && [[ $PYINSTALLERARGS == *"--onedir"* ]]; then
     cd /app/build/dist/
-    zip -r --symlinks main.zip main/
+    zip -r -q -T --symlinks main.zip main/
 fi
 

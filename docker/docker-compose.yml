@@ -13,6 +13,7 @@ services:
       - ../docker:/app/docker:ro
       - ../project:/app/project:ro
       - ../build:/app/build
+       ../build/runtime:/app/runtime
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - ~/.Xauthority:/root/.Xauthority:rw
       - installation_state:/app/state
