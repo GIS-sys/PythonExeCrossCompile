@@ -11,21 +11,21 @@ services:
       dockerfile: docker/Dockerfile
     volumes:
       - ../docker:/app/docker:ro
-      - ../project:/app/project:ro
+      - ../project:/app/project:rwo
       - ../build:/app/build:rwo
       - ../runtime:/app/runtime:rwo
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - ~/.Xauthority:/root/.Xauthority:rw
       - installation_state:/app/state
       - wine:/root/.wine
-    network_mode: host
     working_dir: /app
     entrypoint: ["/app/docker/entrypoint.sh"]
     command: []
     stdin_open: true
     tty: true
+    ports:
+      - 127.0.0.1:8000:8000
 
 volumes:
   installation_state:
   wine:
-
