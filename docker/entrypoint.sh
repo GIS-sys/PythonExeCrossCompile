@@ -1,7 +1,7 @@
 #!/bin/bash
 
 mkdir -p /app/state
-read -r PYTHON_VERSION < /app/project/__version__.txt
+PYTHON_VERSION=$(tr -d '\r\n' < /app/project/__version__.txt)
 echo "PYTHON VERSION: $PYTHON_VERSION"
 echo "Mode: $MODE"
 echo "Arguments for main.exe: $MAINARGS"
