@@ -1,61 +1,94 @@
-import sys
-import os
-import torch
+from fastapi import FastAPI, HTTPException, File, UploadFile
+from fastapi.responses import FileResponse
+
+from typing import Annotated, Optional
+
 from pathlib import Path
+import shutil
+import os
+import tempfile
+import asyncio
+
+from schemas import UniqueIdGenerator
+
+import os
+import uvicorn
 
 
-def main():
-    print("Windows PyTorch Test Application v4.1")
-    print("=" * 40)
+app = FastAPI()
 
-    # Простая проверка аргументов
-    if len(sys.argv) < 3:
-        print("Usage: stl_processor.exe path_to_stl=... target_folder=...")
-        return 1
+FILE_EXTENSIONS = (".step", ".stl", ".obj")
+BASE_DIR = Path("result_files")
+BASE_DIR.mkdir(exist_ok=True)
 
-    # Проверяем что PyTorch работает
-    try:
-        print("Testing PyTorch...")
-        a = torch.tensor([[1, 2], [3, 4]])
-        b = torch.tensor([[5, 6], [7, 8]])
-        result = torch.matmul(a, b)
-        print(f"PyTorch test passed! Result:\n{result}")
-    except Exception as e:
-        print(f"PyTorch test failed: {e}")
-        return 1
+generator = UniqueIdGenerator()
 
-    # Простая имитация работы с файлами
-    try:
-        path_to_stl = sys.argv[1].split('=')[1]
-        target_folder = sys.argv[2].split('=')[1]
 
-        print(f"Input STL: {path_to_stl}")
-        print(f"Output folder: {target_folder}")
+async def wait_for_file(old_file_name: str, new_extension: str = ".color", check_interval: float = 2.0) -> tuple:
+    new_file = old_file_name + new_extension
 
-        # Создаем простые файлы
-        stl_path = Path(path_to_stl)
-        obj_file = stl_path.stem + ".obj"
-        txt_file = stl_path.stem + ".txt"
+    file_path = BASE_DIR / new_file
 
-        # Записываем тестовые файлы
-        with open(obj_file, 'w') as f:
-            f.write("# Test OBJ file\n")
-            f.write(f"# Generated from {path_to_stl}\n")
+    while not file_path.exists():
+        await asyncio.sleep(check_interval)
 
-        with open(txt_file, 'w') as f:
-            f.write(f"Source: {path_to_stl}\n")
-            f.write(f"Output: {obj_file}\n")
-            f.write("Status: Success\n")
+    return (str(file_path), new_file)
 
-        print(f"Created: {obj_file}")
-        print(f"Created: {txt_file}")
 
-        return 0
+@app.get("/color")
+async def get_file(filename: str, path_to_temp: Optional[str] = None) -> FileResponse:
+    if not (filename.lower().endswith(FILE_EXTENSIONS)):
+        raise HTTPException(status_code=404, detail="The file has an incorrect extension.")
 
-    except Exception as e:
-        print(f"Error: {e}")
-        return 1
+    if path_to_temp != None:
+        path_to_file = Path(path_to_temp)
+    else:
+        path_to_file = Path(filename)
+    
+    extension = os.path.splitext(filename)[1]
+
+    new_file_base = generator.generate_uuid()
+    full_file_name = new_file_base + extension
+
+    target_path = BASE_DIR / full_file_name
+    shutil.move(path_to_file, target_path)
+
+    new_extension_file_path, new_file_name = await wait_for_file(new_file_base)
+
+    return FileResponse(path=new_extension_file_path, filename=new_file_name)
+
+
+@app.post("/color_file")
+async def upload_file(
+    file: Annotated[UploadFile, 
+    File(description="File of obj, step, stl extensions")]
+    ) -> FileResponse:
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        file_path = os.path.join(tmpdir, file.filename)
+        content = await file.read()
+        with open(file_path, 'wb') as f:
+            f.write(content)
+
+        result = await get_file(file.filename, file_path)
+
+        return result
+    
 
 if __name__ == "__main__":
-    sys.exit(main())
-
+    print("Starting FastAPI Server from main.exe")
+    print("=" * 50)
+    
+    try:
+        uvicorn.run(
+            app=app,  
+            host="0.0.0.0",
+            port=8000,
+            reload=False,
+            log_level="info"
+        )
+    except KeyboardInterrupt:
+        print("\n Server stopped by user")
+    except Exception as e:
+        print(f" Error starting server: {e}")
+        input("Press Enter to exit...")
