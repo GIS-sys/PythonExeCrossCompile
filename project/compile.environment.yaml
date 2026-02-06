@@ -1,7 +1,7 @@
 channels:
   - conda-forge
-  - defaults
 dependencies:
   - conda-forge::occt=7.9.0
   - conda-forge::pythonocc-core=7.9.0
+  - conda-forge::glib
 

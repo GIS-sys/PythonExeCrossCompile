@@ -46,17 +46,11 @@ You can compile the code either via docker (preferable), or via manual installat
 
     1) Wine Mono Installer
 
-       It is a small window with two buttons: Cancel and Install. Press Install and wait for the download to end
+       It is a small window with two buttons: Cancel and Install. Press Install and wait for the download to finish
 
     2) Visual Studio
 
        I didn't get the prompt last time I checked, in case you are prompted to do something - please open an issue / PR and describe the steps you were prompted to take
-
-    3) Conda
-
-       - first, check checkbox "only for this user"
-       - in Advanced Options, check all 4 of the boxes
-       - after the installation, uncheck all 2 of the checkboxes
 
 3) Compile the application. There are several options, depending on what you need:
 

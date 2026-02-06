@@ -15,9 +15,9 @@ if wine mamba --version >/dev/null 2>&1; then
 else
     echo -e "\n>>> Mamba is not installed, installing Mambaforge\n"
 
-    # Uinstall previous
-    echo -e "\n>>> ... Reinstalling mamba from scratch...\nPlease, choose and uninstall previous versions of python / conda / mamba\n"
-    wine uninstaller
+    # # Uinstall previous
+    # echo -e "\n>>> ... Reinstalling mamba from scratch...\nPlease, choose and uninstall previous versions of python / conda / mamba\n"
+    # wine uninstaller
 
     # Install required dependencies
     echo -e "\n>>> ... Installing VC2019\n"
@@ -75,18 +75,18 @@ wine_mamba_run python --version
 echo -e "\n>>> Installing mamba dependencies\n"
 echo -e "\n>>> ... Cleaning mamba\n"
 wine mamba clean -a -y
-echo -e "\n>>> ... Installing base libs\n"
-if wine_mamba_run pip install -r /app/docker/requirements.txt; then
-    echo -e "\n>>> ... ... Base libs installed successfully\n"
-else
-    echo -e "\n>>> Error during installing base libs\n"
-    exit 1
-fi
 echo -e "\n>>> ... Updating env with mamba\n"
 if wine mamba env update -n ${target_env_name} -f /app/project/compile.environment.yaml -vv  2>&1; then
     echo -e "\n>>> ... ... Mamba environment updated successfully\n"
 else
     echo -e "\n>>> Error during updating mamba env\n"
+    exit 1
+fi
+echo -e "\n>>> ... Installing base libs\n"
+if wine_mamba_run pip install -r /app/docker/requirements.txt; then
+    echo -e "\n>>> ... ... Base libs installed successfully\n"
+else
+    echo -e "\n>>> Error during installing base libs\n"
     exit 1
 fi
 echo -e "\n>>> ... Updating env with pip\n"
