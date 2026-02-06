@@ -76,14 +76,27 @@ wine_conda_run python --version
 
 
 echo -e "\n>>> Installing conda dependencies\n"
-wine conda install -n base conda-libmamba-solver --yes
-echo -e "\n>>> ... Installed libmamba solver\n"
-wine conda config --set solver libmamba
-echo -e "\n>>> ... Set libmamba solver as default\n"
+wine conda config --add channels conda-forge
+wine conda config --set channel_priority strict
+echo -e "\n>>> ... Updating base mamba\n"
+conda update -n base --all
+echo -e "\n>>> ... Installing mamba\n"
+wine conda install -n base mamba -y
+echo -e "\n>>> ... Cleaning mamba\n"
+wine mamba clean -a
+echo -e "\n>>> ... Initiating mamba\n"
+wine mamba init
+echo -e "\n>>> ... Updating env with mamba\n"
+wine mamba env update -n ${target_env_name} -f /app/project/compile.environment.yaml -y
+#wine conda install -n base conda-libmamba-solver --yes
+#echo -e "\n>>> ... Installed libmamba solver\n"
+#wine conda config --set solver libmamba
+#echo -e "\n>>> ... Set libmamba solver as default\n"
 #wine conda env update -n ${target_env_name} -f /app/project/compile.environment.yaml -vv 2>&1
 #wine conda env update -n ${target_env_name} -f /app/project/compile.environment.yaml -vv --json 2>&1
-wine conda env update -n ${target_env_name} -f /app/project/compile.environment.yaml 2>&1 | tee /tmp/conda_update.log
+#wine conda env update -n ${target_env_name} -f /app/project/compile.environment.yaml 2>&1 | tee /tmp/conda_update.log
 echo -e "\n>>> ... Installed environment\n"
+exit
 if wine conda env update -n ${target_env_name} -f /app/project/compile.environment.yaml --dry-run 2>&1 | grep -q "All requested packages already installed"; then
     echo "\n>>> ... Environment matches environment.yml\n"
 else
