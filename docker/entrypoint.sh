@@ -8,6 +8,26 @@ echo "Arguments for pyinstaller: $PYINSTALLERARGS"
 
 
 
+# Perform run- commands
+case "$MODE" in
+    "run-onefile")
+        echo "Running previously compiled main.exe..."
+        cd /app/runtime
+        wine /app/build/dist/main.exe $MAINARGS
+        exit
+        ;;
+    "run-onedir")
+        echo "Running previously compiled main.exe..."
+        cd /app/runtime
+        wine /app/build/dist/main/main.exe $MAINARGS
+        exit
+        ;;
+    *)
+        ;;
+esac
+
+
+
 # Check installation state
 wine mamba
 if wine mamba --version >/dev/null 2>&1; then
@@ -127,16 +147,6 @@ case "$MODE" in
         echo "Compilation..."
         cd /app/build
         wine_mamba_run pyinstaller --noconfirm $PYINSTALLERARGS "Z:\\app\\project\\main.py"
-        ;;
-    "run-onefile")
-        echo "Running previously compiled main.exe..."
-        cd /app/runtime
-        wine_mamba_run /app/build/dist/main.exe $MAINARGS
-        ;;
-    "run-onedir")
-        echo "Running previously compiled main.exe..."
-        cd /app/runtime
-        wine_mamba_run /app/build/dist/main/main.exe $MAINARGS
         ;;
     *)
         echo "Error: Unknown mode '$MODE'"
