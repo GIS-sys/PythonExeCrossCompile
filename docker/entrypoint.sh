@@ -1,6 +1,5 @@
 #!/bin/bash
 
-mkdir -p /app/state
 PYTHON_VERSION=$(tr -d '\r\n' < /app/project/__version__.txt)
 echo "PYTHON VERSION: $PYTHON_VERSION"
 echo "Mode: $MODE"
@@ -10,92 +9,95 @@ echo "Arguments for pyinstaller: $PYINSTALLERARGS"
 
 
 # Check installation state
-installed_version=$(wine python --version)
-required_version=$(printf "Python ${PYTHON_VERSION}\15")
-if [[ $installed_version != $required_version ]]; then
-    cd /app/state
+wine conda
+conda_installed=$(wine conda)
+if [[ "$conda_installed" == *"conda is a tool"* ]]; then
+    echo -e "\n>>> Conda installation already completed, skipping\n"
+else
+    echo -e "\n>>> Conda is not installed\n"
+
+    # Uinstall python
     while true; do
         python_installed=$(wine python --version)
         if [[ "$python_installed" == "Application could not be started"* ]]; then
             break
         fi
-        echo -e "\n\nUninstalling Python...\nChoose and uninstall previous version of python"
+        echo -e "\n>>> ... Uninstalling Python...\nChoose and uninstall previous version of python / conda\n"
         wine uninstaller
     done
 
+    # Install required dependencies
+    echo -e "\n>>> ... Installing VC2019\n"
     winetricks --force vcrun2019
     winetricks -q win10
 
-    wine python --version
-    echo -e "\n\nA\n\n"
-    wget "https://www.python.org/ftp/python/${PYTHON_VERSION}/python-${PYTHON_VERSION}-amd64.exe"
-    echo -e "\n\nB\n\n"
-    wine ./python-${PYTHON_VERSION}-amd64.exe /quiet InstallAllUsers=1 PrependPath=1
-    echo -e "\n\nC\n\n"
+    # Install conda
+    echo -e "\n>>> ... Downloading conda\n"
     wget "https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe" -O miniconda.exe
-    echo -e "\n\nD\n\n"
-    wine miniconda.exe tos accept --override-channels --channel https://repo.anaconda.com/pkg
-    echo -e "\n\nE\n\n"
+    echo -e "\n>>> ... Installing conda\n"
     wine miniconda.exe /S /InstallationType=JustMe /AddToPath=1 /RegisterPython=0
-    echo -e "\n\nF\n\n"
 
-    sleep 5
-
-    export WINEPATH="C:\\Miniconda3;C:\\Miniconda3\\Scripts;C:\\Miniconda3\\Library\\bin;$WINEPATH"
-    echo -e "\n\nG\n\n"
-    wine conda tos accept --override-channels --channel https://repo.anaconda.com/pkg
-    echo -e "\n\nH\n\n"
-    wine conda init
-    echo -e "\n\nI\n\n"
-    wine conda config --add channels conda-forge
-    echo -e "\n\nJ\n\n"
-    wine conda config --set channel_priority strict
-    echo -e "\n\nK\n\n"
-
-    wine conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
-    wine conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
-    wine conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/msys2
-    echo -e "\n\nKL\n\n"
-    wine conda install -c conda-forge pythonocc-core=7.7.0 -y
-    echo -e "\n\nL\n\n"
-
-    wine python -m pip install --upgrade pip
-    wine pip install -r /app/docker/requirements.txt
-
-    wine python -c "import OCC; print(f'pythonocc-core успешно установлен: {OCC.__version__}')"
-    if [ $? -ne 0 ]; then
-        echo "Error: pip install failed"
-        exit 1
-    fi
-
-    # Mark installation as complete in persistent storage
-    touch /app/state/installation_complete_python$PYTHON_VERSION
-    echo "Python Installation completed successfully."
-else
-    echo "Python Installation already completed, skipping..."
-    wine conda config --set solver classic > /tmp/b && cat /tmp/b
-    echo -e "\n\nZ\n\n"
-    wine conda config --system --set solver classic && wine conda update --all -y
-    echo -e "\n\nY\n\n"
-    #wine conda config --set solver classic
-    #wine python --version
-    #wine conda create -n myenv python=${PYTHON_VERSION} -y
-    wine conda activate myenv
-    wine conda env list
-
-    wine conda list
-    #wine conda install -c conda-forge pythonocc-core=7.9.0 -y > /tmp/a && cat /tmp/a
-    #wine conda list
-    exit
+    echo -e "\n>>> Conda installation is completed\n"
 fi
 
 
 
-echo "Starting main script"
-wine python --version
+echo -e "\n>>> Accepting conda tos\n"
+wine conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
+wine conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
+wine conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/msys2
+
+
+
+# Create environment with specified python version
+target_env_name="conda_env_py${PYTHON_VERSION}"
+
+echo -e "\n>>> Removing old envs\n"
+wine conda env list | grep -vE "base|${target_env_name}|^#|^$" | awk '{print $1}' | while read env; do
+    [[ "$env" =~ [A-Za-z] ]] && \
+    echo -e "\n>>> ... Removing ^$env^" && \
+    wine conda env remove -n "${env}" -y
+done
+
+if wine conda env list | grep -q "${target_env_name}"; then
+    echo -e "\n>>> Environment ${target_env_name} already exists, skipping\n"
+else
+    echo -e "\n>>> Environment ${target_env_name} does not exist\n"
+    wine conda init
+    wine conda config --add channels conda-forge
+    wine conda create -n ${target_env_name} python=${PYTHON_VERSION} -y > /tmp/a && cat /tmp/a
+fi
+
+wine_conda_run() {
+    wine cmd /c "conda activate ${target_env_name} & $*"
+}
+wine_conda_run python --version
+
+
+
+echo -e "\n>>> Installing conda dependencies\n"
+wine conda install -n base conda-libmamba-solver --yes
+echo -e "\n>>> ... Installed libmamba solver\n"
+wine conda config --set solver libmamba
+echo -e "\n>>> ... Set libmamba solver as default\n"
+#wine conda env update -n ${target_env_name} -f /app/project/compile.environment.yaml -vv 2>&1
+#wine conda env update -n ${target_env_name} -f /app/project/compile.environment.yaml -vv --json 2>&1
+wine conda env update -n ${target_env_name} -f /app/project/compile.environment.yaml 2>&1 | tee /tmp/conda_update.log
+echo -e "\n>>> ... Installed environment\n"
+if wine conda env update -n ${target_env_name} -f /app/project/compile.environment.yaml --dry-run 2>&1 | grep -q "All requested packages already installed"; then
+    echo "\n>>> ... Environment matches environment.yml\n"
+else
+    echo "\n>>> Environment DOES NOT match environment.yml\n"
+    exit 1
+fi
+
+
+
+echo -e "\n>>> Starting main script\n"
+wine_conda_run python --version
 wine --version
 winetricks -q win10
-wine pip freeze
+wine_conda_run pip freeze
 
 
 
@@ -116,23 +118,18 @@ fi
 case "$MODE" in
     "compile"*)
         echo "Compilation..."
-        wine pip install -r /app/project/requirements.txt
-        if [ $? -ne 0 ]; then
-            echo "Error: pip install failed"
-            exit 1
-        fi
         cd /app/build
-        wine pyinstaller --noconfirm $PYINSTALLERARGS "Z:\\app\\project\\main.py"
+        wine_conda_run pyinstaller --noconfirm $PYINSTALLERARGS "Z:\\app\\project\\main.py"
         ;;
     "run-onefile")
         echo "Running previously compiled main.exe..."
         cd /app/runtime
-        wine /app/build/dist/main.exe $MAINARGS
+        wine_conda_run /app/build/dist/main.exe $MAINARGS
         ;;
     "run-onedir")
         echo "Running previously compiled main.exe..."
         cd /app/runtime
-        wine /app/build/dist/main/main.exe $MAINARGS
+        wine_conda_run /app/build/dist/main/main.exe $MAINARGS
         ;;
     *)
         echo "Error: Unknown mode '$MODE'"

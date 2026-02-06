@@ -11,7 +11,8 @@ services:
       dockerfile: docker/Dockerfile
     volumes:
       - ../docker:/app/docker:ro
-      - /home/giswarm/tmp/MeshCNN:/app/project:ro
+      #- /home/giswarm/tmp/MeshCNN:/app/project:ro
+      - ../project:/app/project:ro
       - ../build:/app/build:rwo
       - ../runtime:/app/runtime:rwo
       - /tmp/.X11-unix:/tmp/.X11-unix:rw

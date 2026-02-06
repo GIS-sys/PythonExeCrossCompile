@@ -1,4 +1,0 @@
--i https://download.pytorch.org/whl/cpu
-numpy==2.1.2
-torch==2.8.0
-

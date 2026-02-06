@@ -24,7 +24,7 @@ You can compile the code either via docker (preferable), or via manual installat
 
         1) modify `project/__version__.txt` file according to your preferred python version in full form (3.12.10, not 3.12)
 
-        2) modify `project/requirements.txt` file with required libraries and their versions
+        2) modify `project/compile.environment.yaml` file with required libraries and their versions
 
         3) put all the source files into a `project/` folder with `project/main.py` as an entry point
 
@@ -32,7 +32,7 @@ You can compile the code either via docker (preferable), or via manual installat
 
         1) create `/path/to/your/project/__version__.txt` file with preferred python version in full form (3.12.10, not 3.12)
 
-        2) create `/path/to/your/project/requirements.txt` file with required libraries and their versions
+        2) create `/path/to/your/project/compile.environment.yaml` file with required libraries and their versions
 
         3) make sure `/path/to/your/project/main.py` is the entry point for your entire application
 
@@ -48,9 +48,11 @@ You can compile the code either via docker (preferable), or via manual installat
 
        I didn't get the prompt last time I checked, in case you are prompted to do something - please open an issue / PR and describe the steps you were prompted to take
 
-    3) Python
+    3) Conda
 
-       Check both checkboxes ("Use admin priviliges ..." and "Add python.exe to PATH"), then click "Install Now", after installation is finished click "Close"
+       - first, check checkbox "only for this user"
+       - in Advanced Options, check all 4 of the boxes
+       - after the installation, uncheck all 2 of the checkboxes
 
 3) Compile the application. There are several options, depending on what you need:
 
