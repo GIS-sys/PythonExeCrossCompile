@@ -1,12 +1,17 @@
-import sys
 import os
-import torch
 from pathlib import Path
+import sys
+
+from OCC.Core.gp import gp_Pnt
+import torch
 
 
 def main():
     print("Windows PyTorch Test Application v4.1")
     print("=" * 40)
+
+    # Проверка работы OCC
+    print(gp_Pnt(0.1, 0.2, 0.3).XYZ().SquareModulus())
 
     # Простая проверка аргументов
     if len(sys.argv) < 3:

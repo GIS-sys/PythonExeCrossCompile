@@ -2,10 +2,7 @@ channels:
   - conda-forge
   - defaults
 dependencies:
+  - conda-forge::occt=7.9.0
+  - conda-forge::pythonocc-core=7.9.0
   - pip
-  - pip:
-    - --i https://download.pytorch.org/whl/cpu
-    - --extra-index-url=https://pypi.org/simple
-    - torch==2.8.0
-    - numpy==2.1.2
 
