@@ -24,7 +24,9 @@ You can compile the code either via docker (preferable), or via manual installat
 
         1) modify `project/__version__.txt` file according to your preferred python version in full form (3.12.10, not 3.12)
 
-        2) modify `project/compile.environment.yaml` file with required libraries and their versions
+        2) modify `project/compile.environment.yaml` and `project/requirements.txt` files with required libraries and their versions
+
+           WARNING: NEVER add pip requirements to .yaml file directly, or the script will stall
 
         3) put all the source files into a `project/` folder with `project/main.py` as an entry point
 
@@ -32,7 +34,9 @@ You can compile the code either via docker (preferable), or via manual installat
 
         1) create `/path/to/your/project/__version__.txt` file with preferred python version in full form (3.12.10, not 3.12)
 
-        2) create `/path/to/your/project/compile.environment.yaml` file with required libraries and their versions
+        2) create `project/compile.environment.yaml` and `project/requirements.txt` files with required libraries and their versions
+
+           WARNING: NEVER add pip requirements to .yaml file directly, or the script will stall
 
         3) make sure `/path/to/your/project/main.py` is the entry point for your entire application
 

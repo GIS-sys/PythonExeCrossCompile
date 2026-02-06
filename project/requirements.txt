@@ -1,6 +1,6 @@
--i https://download.pytorch.org/whl/cpu
 --extra-index-url=https://pypi.org/simple
+-i https://download.pytorch.org/whl/cpu
 
-torch==2.8.0
 numpy==2.1.2
+torch==2.8.0
 

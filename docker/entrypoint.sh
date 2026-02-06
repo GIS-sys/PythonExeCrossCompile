@@ -15,15 +15,9 @@ if wine mamba --version >/dev/null 2>&1; then
 else
     echo -e "\n>>> Mamba is not installed, installing Mambaforge\n"
 
-    # Uinstall python
-    while true; do
-        python_installed=$(wine python --version)
-        if [[ "$python_installed" == "Application could not be started"* ]]; then
-            break
-        fi
-        echo -e "\n>>> ... Uninstalling Python...\nChoose and uninstall previous version of python / conda\n"
-        wine uninstaller
-    done
+    # Uinstall previous
+    echo -e "\n>>> ... Reinstalling mamba from scratch...\nPlease, choose and uninstall previous versions of python / conda / mamba\n"
+    wine uninstaller
 
     # Install required dependencies
     echo -e "\n>>> ... Installing VC2019\n"
