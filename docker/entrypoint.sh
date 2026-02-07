@@ -77,6 +77,7 @@ wine mamba env list | grep -vE "base|${target_env_name}|^#|^$" | awk '{print $1}
     echo -e "\n>>> ... Removing ^$env^" && \
     wine mamba env remove -n "${env}" -y
 done
+echo -e "\n>>> ... Removing old envs is complete\n"
 
 if wine mamba env list | grep -q "${target_env_name}"; then
     echo -e "\n>>> Environment ${target_env_name} already exists, skipping\n"

@@ -1,5 +1,5 @@
---extra-index-url=https://pypi.org/simple
--i https://download.pytorch.org/whl/cpu
+--extra-index-url https://download.pytorch.org/whl/cpu
+--extra-index-url https://pypi.org/simple
 
 numpy==2.1.2
 torch==2.8.0
