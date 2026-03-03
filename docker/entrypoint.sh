@@ -157,7 +157,9 @@ case "$MODE" in
 esac
 
 if [[ $MODE == "compile"* ]] && [[ $PYINSTALLERARGS == *"--onedir"* ]]; then
+    echo "Creating ZIP"
     cd /app/build/dist/
+    rm main.zip
     zip -r -q -T --symlinks main.zip main/
 fi
 
